@@ -4,11 +4,18 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 import java.util.Set;
 
+@Getter
+@Setter
 @Entity(name = "person")
+@Table(indexes = {
+        @Index(name = "idx_person_firstname", columnList = "firstName")
+})
 @Data
 public class Person {
     @Id
