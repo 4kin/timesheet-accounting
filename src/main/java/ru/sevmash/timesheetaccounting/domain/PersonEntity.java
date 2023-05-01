@@ -17,7 +17,7 @@ import java.util.Set;
         @Index(name = "idx_person_firstname", columnList = "firstName")
 })
 @Data
-public class Person {
+public class PersonEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
@@ -32,7 +32,7 @@ public class Person {
     private int personNumber;
 
     @OneToMany(mappedBy = "person")
-    private Set<TimeSheet> timeSheets;
+    private Set<TimeSheetEntity> timeSheetEntities;
 
 
 

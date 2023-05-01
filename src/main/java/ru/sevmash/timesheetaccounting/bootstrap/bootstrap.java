@@ -3,8 +3,8 @@ package ru.sevmash.timesheetaccounting.bootstrap;
 import net.datafaker.Faker;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import ru.sevmash.timesheetaccounting.domain.Person;
-import ru.sevmash.timesheetaccounting.domain.TimeSheet;
+import ru.sevmash.timesheetaccounting.domain.PersonEntity;
+import ru.sevmash.timesheetaccounting.domain.TimeSheetEntity;
 import ru.sevmash.timesheetaccounting.domain.TypesOfTimeEmun;
 import ru.sevmash.timesheetaccounting.repository.PersonRepository;
 import ru.sevmash.timesheetaccounting.repository.TimeSheetRepository;
@@ -25,19 +25,19 @@ public class bootstrap implements CommandLineRunner {
     public void run(String... args) throws Exception {
         System.out.println("loadData");
         loadPersons();
-
-
+        System.out.println("Загруженно людей " + personRepository.findAll().size());
+        System.out.println("Загруженно записей " + timeSheetRepository.findAll().size());
     }
 
-    private TimeSheet loadTimeSheets(Person person) {
+    private TimeSheetEntity loadTimeSheets(PersonEntity person) {
 
         Faker faker = new Faker(new Locale("ru"));
-        TimeSheet timeSheet = new TimeSheet();
-        timeSheet.setHours((byte) faker.number().numberBetween(1, 8));
-        timeSheet.setNotes(faker.lorem().maxLengthSentence(150));
-        timeSheet.setPerson(person);
-        timeSheet.setFileName(faker.file().fileName());
-        timeSheet.setTypes(TypesOfTimeEmun.randomType());
+        TimeSheetEntity timeSheetEntity = new TimeSheetEntity();
+        timeSheetEntity.setHours((byte) faker.number().numberBetween(1, 8));
+        timeSheetEntity.setNotes(faker.lorem().maxLengthSentence(150));
+        timeSheetEntity.setPerson(person);
+        timeSheetEntity.setFileName(faker.file().fileName());
+        timeSheetEntity.setTypes(TypesOfTimeEmun.randomType());
 
         Date date = new Date();
         Calendar calendar = Calendar.getInstance();
@@ -47,8 +47,8 @@ public class bootstrap implements CommandLineRunner {
         calendar.add(Calendar.YEAR, 2);
         calendar.add(Calendar.MONTH, -1);
         Date endDate = calendar.getTime();
-        timeSheet.setDate(faker.date().between(stratDate, endDate));
-        return timeSheet;
+        timeSheetEntity.setDate(faker.date().between(stratDate, endDate));
+        return timeSheetEntity;
     }
 
     private void loadPersons() {
@@ -56,11 +56,11 @@ public class bootstrap implements CommandLineRunner {
         for (int i = 1; i <= 10; i++) {
             getFakePerson();
         }
-        System.out.println("Person loaded");
+//        System.out.println("Person loaded");
     }
 
-    private Person getFakePerson() {
-        Person person = new Person();
+    private PersonEntity getFakePerson() {
+        PersonEntity person = new PersonEntity();
         Faker faker = new Faker(new Locale("ru"));
         String[] fio = faker.name().nameWithMiddle().split(" ");
         person.setFirstName(fio[2]);
@@ -69,13 +69,13 @@ public class bootstrap implements CommandLineRunner {
         person.setDateOfBirth(new Date(faker.date().birthday(15, 78).getTime()));
         person.setPersonNumber(faker.number().numberBetween(1, 5));
         personRepository.save(person);
-        System.out.println(person);
+//        System.out.println(person);
 
         //TODO переписать на стримах
         for (int i = 1; i < 10; i++) {
-            TimeSheet timeSheet = loadTimeSheets(person);
-            timeSheetRepository.save(timeSheet);
-            System.out.println(timeSheet);
+            TimeSheetEntity timeSheetEntity = loadTimeSheets(person);
+            timeSheetRepository.save(timeSheetEntity);
+//            System.out.println(timeSheet);
         }
 
         return person;

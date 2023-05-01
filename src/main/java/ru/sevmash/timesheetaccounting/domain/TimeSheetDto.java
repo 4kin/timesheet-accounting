@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * A DTO for the {@link TimeSheet} entity
+ * A DTO for the {@link TimeSheetEntity} entity
  */
 @Data
 public class TimeSheetDto implements Serializable {

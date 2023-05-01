@@ -1,7 +1,7 @@
 package ru.sevmash.timesheetaccounting.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.sevmash.timesheetaccounting.domain.TimeSheet;
+import ru.sevmash.timesheetaccounting.domain.TimeSheetEntity;
 
-public interface TimeSheetRepository extends JpaRepository<TimeSheet, Long> {
+public interface TimeSheetRepository extends JpaRepository<TimeSheetEntity, Long> {
 }

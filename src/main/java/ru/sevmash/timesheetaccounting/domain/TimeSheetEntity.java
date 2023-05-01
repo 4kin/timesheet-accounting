@@ -7,8 +7,8 @@ import java.util.Date;
 
 
 @Data
-@Entity
-public class TimeSheet {
+@Entity(name = "time_sheet")
+public class TimeSheetEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -16,7 +16,7 @@ public class TimeSheet {
 
     @ManyToOne
     @JoinColumn(name = "person_id")
-    private Person person;
+    private PersonEntity person;
 
     @Enumerated(EnumType.STRING)
     private TypesOfTimeEmun types;
