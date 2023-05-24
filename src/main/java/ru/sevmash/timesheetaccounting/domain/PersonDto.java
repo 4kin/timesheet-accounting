@@ -16,4 +16,6 @@ public class PersonDto implements Serializable {
     private String otchestvo;
     private Date dateOfBirth;
     private int personNumber;
+
+    private boolean deleted;
 }

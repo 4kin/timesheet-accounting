@@ -4,17 +4,14 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Date;
 import java.util.Set;
 
-@Getter
-@Setter
 @Entity(name = "person")
 @Table(indexes = {
-        @Index(name = "idx_person_firstname", columnList = "firstName")
+        @Index(name = "idx_person_firstname", columnList = "firstName"),
+        @Index(name = "idx_personentity_deleted", columnList = "deleted")
 })
 @Data
 public class PersonEntity {
@@ -31,8 +28,10 @@ public class PersonEntity {
     private Date dateOfBirth;
     private int personNumber;
 
-    @OneToMany(mappedBy = "person")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "person")
+    // TODO проверить работу для EAGER
     private Set<TimeSheetEntity> timeSheetEntities;
+    private boolean deleted;
 
 
 

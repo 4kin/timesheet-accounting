@@ -9,7 +9,9 @@ import ru.sevmash.timesheetaccounting.domain.TypesOfTimeEmun;
 import ru.sevmash.timesheetaccounting.repository.PersonRepository;
 import ru.sevmash.timesheetaccounting.repository.TimeSheetRepository;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 @Component
 public class bootstrap implements CommandLineRunner {
@@ -31,11 +33,14 @@ public class bootstrap implements CommandLineRunner {
 
     private TimeSheetEntity loadTimeSheets(PersonEntity person) {
 
+
         Faker faker = new Faker(new Locale("ru"));
         TimeSheetEntity timeSheetEntity = new TimeSheetEntity();
         timeSheetEntity.setHours((byte) faker.number().numberBetween(1, 8));
         timeSheetEntity.setNotes(faker.lorem().maxLengthSentence(150));
         timeSheetEntity.setPerson(person);
+        timeSheetEntity.setDeleted(faker.bool().bool());
+
         timeSheetEntity.setFileName(faker.file().fileName());
         timeSheetEntity.setTypes(TypesOfTimeEmun.randomType());
 
@@ -66,8 +71,9 @@ public class bootstrap implements CommandLineRunner {
         person.setFirstName(fio[2]);
         person.setOtchestvo(fio[1]);
         person.setSecondName(fio[0]);
+        person.setDeleted(faker.bool().bool());
         person.setDateOfBirth(new Date(faker.date().birthday(15, 78).getTime()));
-        person.setPersonNumber(faker.number().numberBetween(1, 5));
+        person.setPersonNumber(faker.number().numberBetween(1, 300));
         personRepository.save(person);
 //        System.out.println(person);
 
