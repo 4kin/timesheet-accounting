@@ -38,11 +38,13 @@ public class TimeSheetService {
     }
 
     public List<TimeSheetDto> getDeletedListTimeSheetByPersonId(Long id) {
-        return timeSheetRepository.findAllByPerson_IdAndDeletedIsFalse(id, Sort.by(Sort.Direction.ASC, "date")).stream().map(timeSheetConverter::toDto).collect(Collectors.toList());
+        return timeSheetRepository.findAllByPerson_IdAndDeletedIsFalse(id,
+                Sort.by(Sort.Direction.ASC, "date")).stream().map(timeSheetConverter::toDto).collect(Collectors.toList());
     }
 
     public List<TimeSheetDto> getAll() {
-        return timeSheetRepository.findAll().stream().map(timeSheetConverter::toDto).collect(Collectors.toList());
+//        return timeSheetRepository.findAll().stream().map(timeSheetConverter::toDto).collect(Collectors.toList());
+        return timeSheetRepository.findAllByDeletedIsFalse().stream().map(timeSheetConverter::toDto).collect(Collectors.toList());
     }
 
     public TimeSheetDto getById(Long id) {
@@ -77,11 +79,11 @@ public class TimeSheetService {
     }
 
 
-    public TimeSheetDto setDeletedTime(Long id, Long idTime) {
+    public TimeSheetDto deleteTime(Long id, Long idTime) {
         return deleteTimeSheetDtoById(idTime, true);
     }
 
-    public TimeSheetDto setUnDeletedTime(Long id, Long idTime) {
+    public TimeSheetDto restoreDeletedTime(Long id, Long idTime) {
         return deleteTimeSheetDtoById(idTime, false);
     }
 

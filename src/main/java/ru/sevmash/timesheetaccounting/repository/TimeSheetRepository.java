@@ -15,6 +15,9 @@ public interface TimeSheetRepository extends JpaRepository<TimeSheetEntity, Long
     @Query("select t from time_sheet t where t.person.id = ?1 ")
     List<TimeSheetEntity> findByPersonId(@NonNull Long id, Sort sort);
 
+
+    public List<TimeSheetEntity> findAllByDeletedIsFalse();
+
 //todo сделать отображение удаленных записей
 
 

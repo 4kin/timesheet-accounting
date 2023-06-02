@@ -27,6 +27,13 @@ public class PersonService {
         this.timeSheetRepository = timeSheetRepository;
     }
 
+    public List<PersonDto> getAllPersons() {
+
+        return personRepository.findAllByDeletedIsFalse()
+                .stream()
+                .map(personConverter::toDto)
+                .collect(Collectors.toList());
+    }
 
     public PersonEntity getPersonById(Long id) {
         Optional<PersonEntity> optionalPerson = personRepository.findById(id);
@@ -40,14 +47,6 @@ public class PersonService {
         }
     }
 
-    public List<PersonDto> getAllPersons() {
-
-        return personRepository.findAllByDeletedIsFalse()
-                .stream()
-                .map(personConverter::toDto)
-                .collect(Collectors.toList());
-    }
-
     public List<PersonDto> getAllDeletedPersons() {
 
         return personRepository.findAllByDeletedIsTrue()
@@ -59,7 +58,7 @@ public class PersonService {
 
     @Transactional
     public PersonDto save(PersonDto personDto) {
-        personRepository.findById(personDto.getId()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Persom id  = " + personDto.getId()+"not found"));
+        personRepository.findById(personDto.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Persom id  = " + personDto.getId() + "not found"));
         PersonEntity person = personConverter.toEntity(personDto);
         PersonEntity saved = personRepository.save(person);
         return personConverter.toDto(saved);

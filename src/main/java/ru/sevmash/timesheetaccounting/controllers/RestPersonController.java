@@ -9,37 +9,17 @@ import ru.sevmash.timesheetaccounting.services.PersonService;
 import java.util.List;
 
 @RestController
-public class PersonController {
+//@CrossOrigin
+public class RestPersonController {
     private final PersonService personService;
 
-    public PersonController(PersonService personService) {
+    public RestPersonController(PersonService personService) {
         this.personService = personService;
     }
 
     @GetMapping("/persons")
-    public List<PersonDto> allPerson() {
+    public List<PersonDto> getAllPerson() {
         return personService.getAllPersons();
-    }
-
-    @GetMapping("/deleted_persons")
-    public List<PersonDto> allDeletedPerson() {
-        return personService.getAllDeletedPersons();
-    }
-
-
-    @PostMapping("/person")
-    public PersonDto createPerson(@RequestBody PersonDto personDto) {
-        return personService.createPersons(personDto);
-    }
-
-    @GetMapping("/person/{id}/delete")
-    public PersonDto setDeletedPerson(@PathVariable Long id) {
-        return personService.setDeletedPersonById(id);
-    }
-
-    @GetMapping("/person/{id}/undelete")
-    public PersonDto setUnDeletedPerson(@PathVariable Long id) {
-        return personService.setUnDeletedPersonById(id);
     }
 
     @GetMapping("/person/{id}")
@@ -47,7 +27,29 @@ public class PersonController {
         return personService.getPersonById(id);
     }
 
-    @PatchMapping("/person/{id}")
+    @GetMapping("/persons/deleted")
+    public List<PersonDto> allDeletedPerson() {
+        return personService.getAllDeletedPersons();
+    }
+
+
+    @DeleteMapping("/person/{id}")
+    public PersonDto deletePerson(@PathVariable Long id) {
+        return personService.setDeletedPersonById(id);
+    }
+
+    @DeleteMapping("/person/undelete/{id}")
+    public PersonDto unDeletePerson(@PathVariable Long id) {
+        return personService.setUnDeletedPersonById(id);
+    }
+
+
+    @PostMapping("/person")
+    public PersonDto newPerson(@RequestBody PersonDto personDto) {
+        return personService.save(personDto);
+    }
+
+    @PutMapping("/person/{id}")
     public PersonDto updatePerson(@RequestBody PersonDto personDto) {
         return personService.save(personDto);
     }
