@@ -9,7 +9,7 @@ import ru.sevmash.timesheetaccounting.services.PersonService;
 import java.util.List;
 
 @RestController
-//@CrossOrigin
+@RequestMapping({"/api/person"})
 public class RestPersonController {
     private final PersonService personService;
 
@@ -17,41 +17,41 @@ public class RestPersonController {
         this.personService = personService;
     }
 
-    @GetMapping("/persons")
+    @GetMapping("")
     public List<PersonDto> getAllPerson() {
         return personService.getAllPersons();
     }
 
-    @GetMapping("/person/{id}")
+    @GetMapping("/{id}")
     public PersonEntity getPerson(@PathVariable Long id) {
         return personService.getPersonById(id);
     }
 
-    @GetMapping("/persons/deleted")
-    public List<PersonDto> allDeletedPerson() {
+    @GetMapping("/deleted")
+    public List<PersonDto> getAllDeletedPerson() {
         return personService.getAllDeletedPersons();
     }
 
 
-    @DeleteMapping("/person/{id}")
+    @DeleteMapping("/{id}")
     public PersonDto deletePerson(@PathVariable Long id) {
         return personService.setDeletedPersonById(id);
     }
 
-    @DeleteMapping("/person/undelete/{id}")
+    @DeleteMapping("/{id}/restore")
     public PersonDto unDeletePerson(@PathVariable Long id) {
-        return personService.setUnDeletedPersonById(id);
+        return personService.restoreDeletedPerson(id);
     }
 
 
-    @PostMapping("/person")
+    @PostMapping("")
     public PersonDto newPerson(@RequestBody PersonDto personDto) {
-        return personService.save(personDto);
+        return personService.addNewPerson(personDto);
     }
 
-    @PutMapping("/person/{id}")
+    @PutMapping("")
     public PersonDto updatePerson(@RequestBody PersonDto personDto) {
-        return personService.save(personDto);
+        return personService.updatePerson(personDto);
     }
 
 

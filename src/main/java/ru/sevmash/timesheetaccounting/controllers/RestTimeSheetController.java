@@ -1,5 +1,4 @@
 package ru.sevmash.timesheetaccounting.controllers;
-
 import org.springframework.web.bind.annotation.*;
 import ru.sevmash.timesheetaccounting.domain.TimeSheetDto;
 import ru.sevmash.timesheetaccounting.services.TimeSheetService;
@@ -27,7 +26,7 @@ public class RestTimeSheetController {
         return timeSheetService.getListTimeSheetDeletedByPersonId(id);
     }
 
-    @GetMapping("/allPerson")
+    @GetMapping("/all")
     public List<TimeSheetDto> getAllTimeShits() {
         return timeSheetService.getAll();
     }
@@ -42,17 +41,17 @@ public class RestTimeSheetController {
         return timeSheetService.addNewTime(id, timeSheetDto);
     }
 
-    @PutMapping("/person/{id}/time/update")
+    @PutMapping("/{id}/")
     public TimeSheetDto updateTimeByPersonId(@PathVariable Long id, @RequestBody TimeSheetDto timeSheetDto) {
         return timeSheetService.updateTime(id, timeSheetDto);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public TimeSheetDto deleteTimeByPersonId(@PathVariable Long id) {
         return timeSheetService.deleteTime(id);
     }
 
-    @GetMapping("/{id}/restore")
+    @DeleteMapping("/{id}/restore")
     public TimeSheetDto restoreTime(@PathVariable Long id) {
         return timeSheetService.restoreDeletedTime(id);
     }
