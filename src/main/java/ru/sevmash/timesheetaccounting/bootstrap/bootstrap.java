@@ -9,8 +9,8 @@ import ru.sevmash.timesheetaccounting.domain.TypesOfTimeEmun;
 import ru.sevmash.timesheetaccounting.repository.PersonRepository;
 import ru.sevmash.timesheetaccounting.repository.TimeSheetRepository;
 
+import java.sql.Date;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 @Component
@@ -24,7 +24,7 @@ public class bootstrap implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         System.out.println("loadData");
         loadPersons();
         System.out.println("Загруженно людей " + personRepository.findAll().size());
@@ -44,14 +44,14 @@ public class bootstrap implements CommandLineRunner {
         timeSheetEntity.setFileName(faker.file().fileName());
         timeSheetEntity.setTypes(TypesOfTimeEmun.randomType());
 
-        Date date = new Date();
+        java.util.Date date = new java.util.Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.YEAR, -2);
-        Date stratDate = calendar.getTime();
+        java.util.Date stratDate = calendar.getTime();
         calendar.add(Calendar.YEAR, 2);
         calendar.add(Calendar.MONTH, -1);
-        Date endDate = calendar.getTime();
+        java.util.Date endDate = calendar.getTime();
         timeSheetEntity.setDate(faker.date().between(stratDate, endDate));
         return timeSheetEntity;
     }
@@ -69,7 +69,7 @@ public class bootstrap implements CommandLineRunner {
         Faker faker = new Faker(new Locale("ru"));
         String[] fio = faker.name().nameWithMiddle().split(" ");
         person.setFirstName(fio[2]);
-        person.setOtchestvo(fio[1]);
+        person.setMiddleName(fio[1]);
         person.setSecondName(fio[0]);
         person.setDeleted(faker.bool().bool());
         person.setDateOfBirth(new Date(faker.date().birthday(15, 78).getTime()));

@@ -1,14 +1,16 @@
+package ru.sevmash.timesheetaccounting.controllers;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.sevmash.timesheetaccounting.controllers.RestPersonController;
 import ru.sevmash.timesheetaccounting.domain.PersonDto;
 import ru.sevmash.timesheetaccounting.services.PersonService;
 
 import java.util.Date;
+
 
 @WebMvcTest(RestPersonController.class)
 public class PersonControllerTest {
@@ -29,14 +31,14 @@ public class PersonControllerTest {
         personDto1.setFirstName("John");
         personDto1.setSecondName("Doe");
         personDto1.setPersonNumber(30);
-        personDto1.setDateOfBirth(new Date());
+        personDto1.setDateOfBirth(new java.sql.Date(new Date().getTime()));
 
         personDto2 = new PersonDto();
         personDto2.setId(2l);
         personDto2.setFirstName("John2");
         personDto2.setSecondName("Doe2");
         personDto2.setPersonNumber(33);
-        personDto2.setDateOfBirth(new Date());
+        personDto2.setDateOfBirth(new java.sql.Date(new Date().getTime()));
 
 
     }
