@@ -46,6 +46,8 @@ public class RestPersonController {
 
     @PostMapping("")
     public PersonDto newPerson(@RequestBody PersonDto personDto) {
+        //todo удалить строку ниже
+        System.out.println("New Person " + personDto);
         return personService.addNewPerson(personDto);
     }
 
