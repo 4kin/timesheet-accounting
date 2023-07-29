@@ -32,19 +32,26 @@ public class TimeSheetService {
     }
 
 
-    public List <TimeSheetDto> getListTimeSheetByPersonId(Long id) {
+    public List<TimeSheetDto> getListTimeSheetByPersonId(Long id) {
         return timeSheetRepository.findAllByPerson_IdAndDeletedIsTrue(id, Sort.by(Sort.Direction.ASC, "date")).stream().map(timeSheetConverter::toDto).collect(Collectors.toList());
 //        return timeSheetRepository.findByPersonId(id, Sort.by("date")).stream().map(timeSheetConverter::toDto).collect(Collectors.toList());
     }
 
     public List<TimeSheetDto> getDeletedListTimeSheetByPersonId(Long id) {
-        return timeSheetRepository.findAllByPerson_IdAndDeletedIsFalse(id,
-                Sort.by(Sort.Direction.ASC, "date")).stream().map(timeSheetConverter::toDto).collect(Collectors.toList());
+        return timeSheetRepository
+                .findAllByPerson_IdAndDeletedIsFalse(id, Sort.by(Sort.Direction.ASC, "date"))
+                .stream()
+                .map(timeSheetConverter::toDto)
+                .collect(Collectors.toList());
     }
 
     public List<TimeSheetDto> getAll() {
 //        return timeSheetRepository.findAll().stream().map(timeSheetConverter::toDto).collect(Collectors.toList());
-        return timeSheetRepository.findAllByDeletedIsFalse().stream().map(timeSheetConverter::toDto).collect(Collectors.toList());
+        return timeSheetRepository
+                .findAllByDeletedIsFalse()
+                .stream()
+                .map(timeSheetConverter::toDto)
+                .collect(Collectors.toList());
     }
 
     public TimeSheetDto getById(Long id) {
@@ -91,7 +98,7 @@ public class TimeSheetService {
 //        TimeSheetEntity timeSheetEntity = timeSheetRepository.findById(idTime).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Time not FOUND"));
 //        timeSheetEntity.setDeleted(deleted);
 //        return timeSheetConverter.toDto(timeSheetRepository.save(timeSheetEntity));
-        timeSheetRepository.setTimeSheetEntityIsDeleted(idTime,deleted);
+        timeSheetRepository.setTimeSheetEntityIsDeleted(idTime, deleted);
         TimeSheetEntity timeSheetEntity = timeSheetRepository.findById(idTime).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Time not FOUND"));
         return timeSheetConverter.toDto(timeSheetEntity);
     }
