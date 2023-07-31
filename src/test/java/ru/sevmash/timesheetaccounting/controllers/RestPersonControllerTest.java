@@ -2,11 +2,14 @@ package ru.sevmash.timesheetaccounting.controllers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import ru.sevmash.timesheetaccounting.services.PersonService;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -14,11 +17,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(RestPersonController.class)
 class RestPersonControllerTest {
 
-    private final MockMvc mvc;
+    @Autowired
+    private MockMvc mockMvc;
 
-    RestPersonControllerTest(MockMvc mvc) {
-        this.mvc = mvc;
-    }
+
+    @MockBean
+    private PersonService personService;
 
     @BeforeEach
     void setUp() {
@@ -26,33 +30,13 @@ class RestPersonControllerTest {
 
     @Test
     void getAllPerson() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/person").accept(MediaType.APPLICATION_JSON))
-                .andDo(print()).andExpect(status().isOk())
+
+        //todo доработать тест
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/person").accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.test").exists())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.test[*].emploeeId").isNotEmpty());
     }
 
-    @Test
-    void getPerson() {
-    }
-
-    @Test
-    void getAllDeletedPerson() {
-    }
-
-    @Test
-    void deletePerson() {
-    }
-
-    @Test
-    void unDeletePerson() {
-    }
-
-    @Test
-    void newPerson() {
-    }
-
-    @Test
-    void updatePerson() {
-    }
 }
