@@ -1,5 +1,9 @@
 package ru.sevmash.timesheetaccounting.controllers;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
@@ -14,75 +18,93 @@ import ru.sevmash.timesheetaccounting.domain.PersonDto;
 import ru.sevmash.timesheetaccounting.domain.PersonEntity;
 import ru.sevmash.timesheetaccounting.services.PersonService;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @WebMvcTest(RestPersonController.class)
-public class PersonControllerTest {
+public class RestPersonControllerWebMockTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
     private PersonService personService;
-//    @Autowired
-//    private PersonConverter personConverter;
-    private PersonDto personDto1;
-    private PersonDto personDto2;
 
+    List<PersonDto> persons;
+
+    private PersonDto personDtoId1;
+    private PersonDto personDtoId2;
+    String personsJsonString;
+    @MockBean
+    private PersonConverter personConverter;
 
     @BeforeEach
     public void setUp() {
-        personDto1 = new PersonDto();
-        personDto1.setId(1l);
-        personDto1.setFirstName("John");
-        personDto1.setSecondName("Doe");
-        personDto1.setPersonNumber(30);
-        // todo установить определенную дату и обновить строку responseString
-        personDto1.setDateOfBirth(new java.sql.Date(new Date().getTime()));
+        personDtoId1 = new PersonDto();
+        personDtoId1.setId(1L);
+        personDtoId1.setFirstName("John");
+        personDtoId1.setSecondName("Doe");
+        personDtoId1.setPersonNumber(30);
+        try {
+            Date date = new SimpleDateFormat("yyyy-MM-dd").parse("2023-08-01");
+            personDtoId1.setDateOfBirth(new java.sql.Date(date.getTime()));
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
 
-        personDto2 = new PersonDto();
-        personDto2.setId(2l);
-        personDto2.setFirstName("John2");
-        personDto2.setSecondName("Doe2");
-        personDto2.setPersonNumber(33);
-        // todo установить определенную дату и обновить строку responseString
-        personDto2.setDateOfBirth(new java.sql.Date(new Date().getTime()));
+        personDtoId2 = new PersonDto();
+        personDtoId2.setId(2L);
+        personDtoId2.setFirstName("John2");
+        personDtoId2.setSecondName("Doe2");
+        personDtoId2.setPersonNumber(33);
+        personDtoId2.setDateOfBirth(new java.sql.Date(new Date().getTime()));
+        personDtoId2.setDateOfBirth(java.sql.Date.valueOf(LocalDate.parse("2023-08-01")));
+        personDtoId2.setDateOfBirth(java.sql.Date.valueOf("2023-08-01")); // для себя 2 строки выше лишние
 
-//        String jsonPersonDto1 = new Gson().toJson(personDto1, personDto1.getClass());
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+
+        String jsonPersonDto1 = gson.toJson(personDtoId1, PersonDto.class);
 //        System.out.printf("%s", jsonPersonDto1);
+        String jsonPersonDto2 = gson.toJson(personDtoId2, PersonDto.class);
+//        System.out.printf("%s", jsonPersonDto1);
+
+        JsonObject[] jsonArray = {(JsonObject) JsonParser.parseString(jsonPersonDto1), (JsonObject) JsonParser.parseString(jsonPersonDto2)};
+
+        personsJsonString = gson.toJson(jsonArray);
+        System.out.println(personsJsonString);
 
     }
 
 
     @Test
     public void testGetAllPersons() throws Exception {
-        List<PersonDto> persons = Arrays.asList(personDto1, personDto2);
+        List<PersonDto> persons = Arrays.asList(personDtoId1, personDtoId2);
         when(personService.getAllPersons()).thenReturn(persons);
-        String responseString = """
-                [{"id":1,"firstName":"John","secondName":"Doe","middleName":null,"dateOfBirth":"2023-08-01","personNumber":30,"deleted":false},{"id":2,"firstName":"John2","secondName":"Doe2","middleName":null,"dateOfBirth":"2023-08-01","personNumber":33,"deleted":false}]
-                """;
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/person"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(responseString));
+                .andExpect(jsonPath("$[0]['id']", is(1)))
+                .andExpect(jsonPath("$[*]['id']", hasItems(1, 2)))
+                .andExpect(MockMvcResultMatchers.content().json(personsJsonString));
     }
 
     @Test
     public void testGetPersonById() throws Exception {
         // todo сделать инекцию
-        PersonEntity personEntity1 = new PersonConverter(new ModelMapper()).toEntity(personDto1);
-//        PersonEntity personEntity1 = personConverter.toEntity(personDto1);
+        PersonEntity personEntity1 = new PersonConverter(new ModelMapper()).toEntity(personDtoId1);
         when(personService.getPersonById(1L)).thenReturn(personEntity1);
         String responseString = """
                 {"id":1,"firstName":"John","secondName":"Doe","middleName":null,"dateOfBirth":"2023-08-01","personNumber":30,"timeSheetEntities":null,"deleted":false}
@@ -98,7 +120,7 @@ public class PersonControllerTest {
         String jsonPerson = """
                 {"firstName":"John","lastName":"Doe","age":30,"email":"john.doe@example.com"}
                 """;
-        when(personService.addNewPerson(any(PersonDto.class))).thenReturn(personDto1);
+        when(personService.addNewPerson(any(PersonDto.class))).thenReturn(personDtoId1);
         String responseString = """
                 {"id":1,"firstName":"John","secondName":"Doe","middleName":null,"dateOfBirth":"2023-08-01","personNumber":30,"deleted":false}
                 """;

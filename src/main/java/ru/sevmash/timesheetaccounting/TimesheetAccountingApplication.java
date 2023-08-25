@@ -5,10 +5,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import ru.sevmash.timesheetaccounting.aspesct.LoggingAspect;
 
 import java.util.Locale;
 
 @SpringBootApplication
+@EnableAspectJAutoProxy
 public class TimesheetAccountingApplication {
 
     public static void main(String[] args) {
@@ -22,6 +25,11 @@ public class TimesheetAccountingApplication {
 
     @Bean
     public Faker getFaker(){
-        return new Faker(new Locale("ru"));
+        return new Faker(new Locale.Builder().setLanguage("ru").setRegion("RU").build());
+    }
+
+    @Bean
+    public LoggingAspect loggingAspect() {
+        return new LoggingAspect();
     }
 }

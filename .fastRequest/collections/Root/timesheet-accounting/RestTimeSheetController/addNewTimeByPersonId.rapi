@@ -12,7 +12,7 @@
 	"id":"api_ru.sevmash.timesheetaccounting.controllers.RestTimeSheetController.addNewTimeByPersonId",
 	"name":"New Request",
 	"paramGroup":{
-		"bodyKeyValueListJson":"{\n  \"person_id\": 2,\n  \"types\": \"ADD\",\n  \"date\": \"2023-06-02\",\n  \"hours\": 14,\n  \"fileName\": \"fileName_kjtay\",\n  \"notes\": \"notes_118bd\",\n  \"deleted\": false\n}",
+		"bodyKeyValueListJson":"{\n  \"types\": \"ADD\",\n  \"date\": \"2023-08-25\",\n  \"hours\": 110,\n  \"fileName\": \"fileName_9hzo6\",\n  \"notes\": \"notes_ew7i8\",\n  \"deleted\": false\n}\n",
 		"className":"ru.sevmash.timesheetaccounting.controllers.RestTimeSheetController",
 		"jsonDocument":"{\n  \"id\": \"No comment,Value =1\",\n  \"person_id\": \"No comment,Value =1\",\n  \"types\": \"No comment,Value =ADD\",\n  \"date\": \"No comment,Value =2023-06-02 19:43:36\",\n  \"hours\": \"No comment,Value =1\",\n  \"fileName\": \"No comment,Value =fileName_kjtay\",\n  \"notes\": \"No comment,Value =notes_118bd\",\n  \"deleted\": \"No comment,Value =true\"\n}",
 		"method":"addNewTimeByPersonId",
@@ -26,7 +26,7 @@
 		"preScript":"",
 		"returnDocument":"{\"id\":\"No comment,Type =Number\",\"person_id\":\"No comment,Type =Number\",\"types\":\"No comment,Type =String\",\"date\":\"No comment,Type =String\",\"hours\":\"No comment,Type =Number\",\"fileName\":\"No comment,Type =String\",\"notes\":\"No comment,Type =String\",\"deleted\":\"No comment,Type =Boolean\"}",
 		"tempId":"",
-		"url":"/api/time_sheets/person/1/addTime",
+		"url":"/api/time_sheets/person/3/addTime",
 		"urlEncodedKeyValueListJson":"[]",
 		"urlEncodedKeyValueListText":"",
 		"urlParamsKeyValueListJson":"[]",

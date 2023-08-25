@@ -3,7 +3,7 @@ package ru.sevmash.timesheetaccounting.domain;
 import java.util.Random;
 
 public enum TypesOfTimeEmun {
-    ADD, REMOVE, BONUS;
+    ADD, REMOVE, BONUS, TRANSFER;
 
 
     private static final Random RND = new Random();

@@ -4,10 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
 import ru.sevmash.timesheetaccounting.convertor.PersonConverter;
@@ -17,10 +15,12 @@ import ru.sevmash.timesheetaccounting.repository.PersonRepository;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class PersonServiceTest {
@@ -35,7 +35,7 @@ class PersonServiceTest {
     @BeforeEach
     void setUp() {
         personEntity = new PersonEntity();
-        personEntity.setId(1l);
+        personEntity.setId(1L);
         personEntity.setDeleted(false);
         personEntity.setFirstName("Nikita");
         personEntity.setSecondName("Fokin");
@@ -44,19 +44,19 @@ class PersonServiceTest {
     @Test
     @DisplayName("Поиск персоны по ИД")
     void getPersonById() {
-        BDDMockito.given(personRepository.findById(personEntity.getId())).willReturn(Optional.of(personEntity));
+        given(personRepository.findById(personEntity.getId())).willReturn(Optional.of(personEntity));
 
         personService.getPersonById(personEntity.getId());
 
-        BDDMockito.verify(personRepository).findById(anyLong());
+        verify(personRepository).findById(anyLong());
     }
 
     @Test
     @DisplayName("Поиcк персоны по ИД. Выброс исключения.")
     void getPersonByIdException() {
-        BDDMockito.given(personRepository.findById(1l)).willReturn(Optional.empty());
+        given(personRepository.findById(1L)).willReturn(Optional.empty());
 
-        assertThatThrownBy(() -> personService.getPersonById(1l))
+        assertThatThrownBy(() -> personService.getPersonById(1L))
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessageContaining("Not Found");
     }
@@ -71,12 +71,12 @@ class PersonServiceTest {
     @DisplayName("Удаляем человека по ИД")
     void setDeletedPersonById() {
 
-        BDDMockito.given(personRepository.findById(personEntity.getId())).willReturn(Optional.of(personEntity));
+        given(personRepository.findById(personEntity.getId())).willReturn(Optional.of(personEntity));
 
-        personService.setDeletedPersonById(1l);
+        personService.setDeletedPersonById(1L);
         assertThat(personEntity.isDeleted()).isTrue();
-        BDDMockito.verify(personRepository).findById(1l);
-        BDDMockito.verify(personRepository).save(personEntity);
+        verify(personRepository).findById(1L);
+        verify(personRepository).save(personEntity);
     }
 
     //todo написать тест с выкидом ошибки
@@ -85,11 +85,11 @@ class PersonServiceTest {
     @DisplayName("Восстанавливаем человека по ИД")
     void restoreDeletedPerson() {
         personEntity.setDeleted(true);
-        BDDMockito.given(personRepository.findById(personEntity.getId())).willReturn(Optional.of(personEntity));
+        given(personRepository.findById(personEntity.getId())).willReturn(Optional.of(personEntity));
 
         personService.restoreDeletedPerson(personEntity.getId());
 
-        BDDMockito.verify(personRepository).save(any());
+        verify(personRepository).save(any());
         assertThat(personEntity.isDeleted()).isFalse();
     }
 
@@ -97,22 +97,22 @@ class PersonServiceTest {
     void testUpdatePerson() {
         PersonDto personDto = new PersonDto();
         personDto.setPersonNumber(123);
-        personDto.setId(1l);
+        personDto.setId(1L);
         personDto.setMiddleName("Александрович");
 
         //todo написать тест
-        BDDMockito.given(personRepository.findById(personEntity.getId())).willReturn(Optional.of(personEntity));
-        BDDMockito.given(personConverter.toEntity(personDto)).willReturn(personEntity);
-        BDDMockito.given(personConverter.toDto(personEntity)).willReturn(personDto);
-        BDDMockito.given(personRepository.save(personEntity)).willReturn(personEntity);
+        given(personRepository.findById(personEntity.getId())).willReturn(Optional.of(personEntity));
+        given(personConverter.toEntity(personDto)).willReturn(personEntity);
+        given(personConverter.toDto(personEntity)).willReturn(personDto);
+        given(personRepository.save(personEntity)).willReturn(personEntity);
 
 
         PersonDto returnPersonDto = personService.updatePerson(personDto);
 
 
-        BDDMockito.verify(personRepository).save(personEntity);
+        verify(personRepository).save(personEntity);
 
-        assertThat(returnPersonDto.getId()).isEqualTo(1l);
+        assertThat(returnPersonDto.getId()).isEqualTo(1L);
         assertThat(returnPersonDto.getPersonNumber()).isEqualTo(123);
 
 

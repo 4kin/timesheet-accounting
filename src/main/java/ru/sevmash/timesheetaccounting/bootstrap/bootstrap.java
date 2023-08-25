@@ -25,16 +25,18 @@ public class bootstrap implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        System.out.println("loadData");
+        System.out.println("Генерация и загрузка данных ...");
         loadPersons();
         System.out.println("Загруженно людей " + personRepository.findAll().size());
         System.out.println("Загруженно записей " + timeSheetRepository.findAll().size());
+        System.out.println("... OK ...");
+
     }
 
     private TimeSheetEntity loadTimeSheets(PersonEntity person) {
 
 
-        Faker faker = new Faker(new Locale("ru"));
+        Faker faker = new Faker(new Locale.Builder().setLanguage("ru").setRegion("RU").build());
         TimeSheetEntity timeSheetEntity = new TimeSheetEntity();
         timeSheetEntity.setHours((byte) faker.number().numberBetween(1, 8));
         timeSheetEntity.setNotes(faker.lorem().maxLengthSentence(150));
@@ -66,7 +68,7 @@ public class bootstrap implements CommandLineRunner {
 
     private PersonEntity getFakePerson() {
         PersonEntity person = new PersonEntity();
-        Faker faker = new Faker(new Locale("ru"));
+        Faker faker = new Faker(new Locale.Builder().setLanguage("ru").setRegion("RU").build());
         String[] fio = faker.name().nameWithMiddle().split(" ");
         person.setFirstName(fio[2]);
         person.setMiddleName(fio[1]);

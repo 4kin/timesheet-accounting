@@ -1,6 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="TestWithCoverage" type="JUnit" factoryName="JUnit">
     <module name="timesheet-accounting" />
+    <extension name="coverage" track_test_folders="true" />
     <option name="PACKAGE_NAME" value="ru" />
     <option name="MAIN_CLASS_NAME" value="" />
     <option name="METHOD_NAME" value="" />

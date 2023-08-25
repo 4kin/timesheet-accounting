@@ -18,12 +18,14 @@ public class PersonService {
     private final PersonRepository personRepository;
     private final PersonConverter personConverter;
 
+
     public PersonService(PersonRepository personRepository, PersonConverter personConverter) {
         this.personRepository = personRepository;
         this.personConverter = personConverter;
     }
 
     public List<PersonDto> getAllPersons() {
+
         return personRepository.findAllByDeletedIsFalse()
                 .stream()
                 .map(personConverter::toDto)
